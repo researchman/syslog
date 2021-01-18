@@ -2,6 +2,8 @@
 #define boost_syslog_hpp
 #include <string>
 
+//#define _WIN32_WINNT 0x0600
+
 enum severity_levels {
 	normal,
 	warning,

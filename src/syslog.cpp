@@ -55,7 +55,7 @@ void log_init()
 {
 	// ´´½¨sinks	
 	boost::shared_ptr<file_sink> fsink = boost::make_shared<file_sink>(
-		keywords::file_name = "syslog%N.log",
+		keywords::file_name = "syslog.log",
 		keywords::rotation_size = 500 * 1024 * 1024,
 		keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
 		keywords::auto_flush = true
