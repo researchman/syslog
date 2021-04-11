@@ -49,11 +49,16 @@ inline std::basic_ostream<C, T>& operator<<(
 }
 
 /*
- * ÈÕÖ¾boostÏà¹Ø³õÊ¼»¯
+* @brief    æ—¥å¿—åˆå§‹åŒ–ã€‚
+* @param    æ— \n
+* @return   æ— \n
+* @note
+* @warning
+* @bug
 */
 void log_init()
 {
-	// ´´½¨sinks	
+	// åˆ›å»ºsinks	
 	boost::shared_ptr<file_sink> fsink = boost::make_shared<file_sink>(
 		keywords::file_name = "syslog.log",
 		keywords::rotation_size = 500 * 1024 * 1024,
@@ -61,30 +66,38 @@ void log_init()
 		keywords::auto_flush = true
 	);
 
-	// ÉèÖÃÈÕÖ¾±£´æÎÄ¼ş¼ĞÏà¹ØĞÅÏ¢
+	// è®¾ç½®æ—¥å¿—ä¿å­˜æ–‡ä»¶å¤¹ç›¸å…³ä¿¡æ¯
 	fsink->locked_backend()->set_file_collector(sinks::file::make_collector(
-		keywords::target = "log"	//Ä¿±êÎÄ¼ş¼Ğ
-									//keywords::max_size = 16 * 1024 * 1024,        //ËùÓĞÈÕÖ¾¼ÓÆğÀ´µÄ×î´ó´óĞ¡,
-									//keywords::min_free_space = 100 * 1024 * 1024  //×îµÍ´ÅÅÌ¿Õ¼äÏŞÖÆ
+		keywords::target = "log"	//ç›®æ ‡æ–‡ä»¶å¤¹
+									//keywords::max_size = 16 * 1024 * 1024,        //æ‰€æœ‰æ—¥å¿—åŠ èµ·æ¥çš„æœ€å¤§å¤§å°,
+									//keywords::min_free_space = 100 * 1024 * 1024  //æœ€ä½ç£ç›˜ç©ºé—´é™åˆ¶
 	));
 
-	// ÉèÖÃsink¸ñÊ½
+	// è®¾ç½®sinkæ ¼å¼
 	fsink->set_formatter(
 		expr::format("[%1%][%2%] %3%")
-		% expr::format_date_time< boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")	// Êä³öÊ±¼ä£¬¾«¶Èµ½ºÁÃë¼¶
-		% expr::attr<severity_levels>("Severity")													// ¼¶±ğĞÅÏ¢
-		% expr::smessage																			// Êä³öÏûÏ¢
+		% expr::format_date_time< boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")	// è¾“å‡ºæ—¶é—´ï¼Œç²¾åº¦åˆ°æ¯«ç§’çº§
+		% expr::attr<severity_levels>("Severity")													// çº§åˆ«ä¿¡æ¯
+		% expr::smessage																			// è¾“å‡ºæ¶ˆæ¯
 	);
 
-	// Ìí¼Ósink
+	// æ·»åŠ sink
 	logging::core::get()->add_sink(fsink);
 
-	// Ìí¼ÓÍ¨ÓÃÊôĞÔ
+	// æ·»åŠ é€šç”¨å±æ€§
 	logging::add_common_attributes();
 }
 
 /*
- * Êä³öÈÕÖ¾ĞÅÏ¢
+* @brief    è¾“å‡ºæ—¥å¿—ä¿¡æ¯ã€‚
+* @param    [in] const char* file_name		æ–‡ä»¶å\n
+* @param    [in] const int line				è¡Œå·\n
+* @param    [in] severity_levels level		æ—¥å¿—çº§åˆ«\n
+* @param    [in] const char* fmt			æ ¼å¼åŒ–å‚æ•°\n
+* @return   æ— \n
+* @note
+* @warning
+* @bug
 */
 void log_impl_print(const char* file_name, const int line, severity_levels level, const char* fmt, ...)
 {
@@ -102,7 +115,13 @@ void log_impl_print(const char* file_name, const int line, severity_levels level
 }
 
 /*
- * ¹¹ÔìÎÄ¼ş+º¯ÊıĞÅÏ¢,ÀıÈç:[main.cpp:14]
+* @brief    æ„é€ æ–‡ä»¶+å‡½æ•°ä¿¡æ¯,ä¾‹å¦‚:[main.cpp:14]ã€‚
+* @param    [in] const char* file_name		æ–‡ä»¶å\n
+* @param    [in] const int line				è¡Œå·\n
+* @return   æ— \n
+* @note
+* @warning
+* @bug
 */
 std::string get_file_line(const char* file_name, const int line)
 {
